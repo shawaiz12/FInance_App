@@ -2,6 +2,8 @@ using Finance_app.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Scalar.AspNetCore;
+using Finance_app.Interfaces;
+using Finance_app.Repositary;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +21,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-    
+
+builder.Services.AddScoped<IStockRepository, StockRepositary>();
+
 
 var app = builder.Build();
 
