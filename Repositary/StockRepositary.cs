@@ -5,6 +5,7 @@ using Scalar.AspNetCore;
 using Finance_app.Interfaces;
 using Finance_app.Models;
 using Finance_app.DTOs.Stock;
+using Finance_app.Helpers;
 
 
 namespace Finance_app.Repositary
@@ -36,9 +37,21 @@ namespace Finance_app.Repositary
             return stockModel;
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            return await _context.Stock.Include(c => c.Comments).ToListAsync();
+            var stocks =  _context.Stock.Include(c => c.Comments).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+            }
+
+            return await stocks.ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
@@ -63,6 +76,11 @@ namespace Finance_app.Repositary
 
             await _context.SaveChangesAsync();
             return existingStock;
+        }
+
+        public async Task<bool> StockExists(int id)
+        {
+            return await _context.Stock.AnyAsync(s => s.Id == id);
         }
     }
 }
