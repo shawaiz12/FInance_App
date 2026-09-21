@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finance_app.DTOs.Comment;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -23,6 +24,6 @@ namespace Finance_app.DTOs.Stock
 
         public long MarketCap { get; set; }
 
-        //
+        public List<CommentDto> Comments { get; set; }
     }
 }
