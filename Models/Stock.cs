@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Finance_app.Models
 {
+    [Table("Stocks")]
     public class Stock
     {
 
@@ -22,6 +23,8 @@ namespace Finance_app.Models
         public string Industry { get; set; } = string.Empty;
 
         public long MarketCap { get; set; }
-        public List<Comment> Comments { get; set; } = new List<Comment>(); 
+        public List<Comment> Comments { get; set; } = new List<Comment>();
+
+        public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
     }
 }
