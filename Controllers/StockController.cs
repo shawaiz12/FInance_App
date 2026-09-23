@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Finance_app.Interfaces;
 using Finance_app.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Finance_app.Controllers
@@ -27,6 +28,7 @@ namespace Finance_app.Controllers
         }
 
         [HttpGet]
+        [Authorize]
 
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
