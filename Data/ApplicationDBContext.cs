@@ -26,14 +26,18 @@ namespace Finance_app.Data
             {
                 new IdentityRole
                 {
+                    Id = "Admin-Role-1234", 
                     Name = "Admin",
-                    NormalizedName = "ADMIN"
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "1"
                 },
 
                  new IdentityRole
                 {
+                    Id = "User-Role-5678",
                     Name = "User",
-                    NormalizedName = "USER", 
+                    NormalizedName = "USER",
+                    ConcurrencyStamp = "2"
                 }
             };
             builder.Entity<IdentityRole>().HasData(roles);

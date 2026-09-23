@@ -4,6 +4,7 @@ using Finance_app.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Finance_app.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260923071724_SeedRole")]
+    partial class SeedRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,15 +182,15 @@ namespace Finance_app.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "Admin-Role-1234",
-                            ConcurrencyStamp = "1",
+                            Id = "417ba214-97ff-4fee-9c5b-798e683983a4",
+                            ConcurrencyStamp = "d0190c94-9bed-4989-8955-0d2081b7ded3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "User-Role-5678",
-                            ConcurrencyStamp = "2",
+                            Id = "d897bdee-0cd9-43cc-b980-ca43bc425fc3",
+                            ConcurrencyStamp = "5d547297-5bb6-4b74-9c6c-6eaa15337869",
                             Name = "User",
                             NormalizedName = "USER"
                         });
