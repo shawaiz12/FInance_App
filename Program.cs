@@ -71,6 +71,8 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+builder.Services.AddScoped<IFMPServince, FMPService>();
+builder.Services.AddHttpClient<IFMPServince, FMPService>();
 
 
 var app = builder.Build();
