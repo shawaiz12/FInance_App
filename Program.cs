@@ -10,22 +10,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Finance_app.Service;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+// Keep only the AddControllers that configures the JSON options
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
+
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
@@ -40,8 +34,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 12;
 })
+.AddEntityFrameworkStores<ApplicationDBContext>();
 
-    .AddEntityFrameworkStores<ApplicationDBContext>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme =
@@ -62,18 +56,26 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(
             System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
         )
-
     };
 });
 
 builder.Services.AddScoped<IStockRepository, StockRepositary>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<IFMPServince, FMPService>();
 builder.Services.AddHttpClient<IFMPServince, FMPService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -86,17 +88,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// Keep only the named policy we configured above
+app.UseCors("AllowReactApp");
 
-app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization(); // Removed the duplicate call
 
 app.MapControllers();
 
-
-
 app.Run();
-
 
 namespace Finance_app
 {

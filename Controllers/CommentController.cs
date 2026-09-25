@@ -13,6 +13,8 @@ using Finance_app.DTOs.Comment;
 using Microsoft.AspNetCore.Identity;
 using Finance_app.Models;
 using Finance_app.Extensions;
+using Finance_app.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Finance_app.Controllers
 {
@@ -34,16 +36,17 @@ namespace Finance_app.Controllers
             _stockRepo = stockRepo;
             _userManager = userManager;
             _fmpService = fMPService;
-        } 
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery] CommentQueryObject queryObject)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var comments = await _commentRepo.GetAllAsync();
+            var comments = await _commentRepo.GetAllAsync(queryObject);
             var CommentDto = comments.Select(c => c.ToCommentDto());
              
             return Ok(CommentDto);

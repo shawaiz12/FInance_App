@@ -5,6 +5,7 @@ using Scalar.AspNetCore;
 using Finance_app.Interfaces;
 using Finance_app.Models;
 using Finance_app.DTOs.Stock;
+using Finance_app.Helpers;
 
 namespace Finance_app.Repositary
 {
@@ -37,9 +38,21 @@ namespace Finance_app.Repositary
             return commentModel;
         }
 
-        public async Task<List<Comment>> GetAllAsync()
+        public async Task<List<Comment>> GetAllAsync(CommentQueryObject queryObject)
         {
-            return await _context.Comment.Include(a => a.AppUser).ToListAsync();
+            var comments = _context.Comment.Include(a => a.AppUser).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
+                comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
+            };
+
+            if(queryObject.IsDescending ==true)
+            {
+                comments = comments.OrderByDescending(c => c.CreatedOn);
+            }
+
+
+            return await comments.ToListAsync();
 
         }
          

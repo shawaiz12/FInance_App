@@ -24,6 +24,7 @@ namespace Finance_app.Controllers
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signinManager = signInManager; 
         }
 
         [HttpPost("login")]
